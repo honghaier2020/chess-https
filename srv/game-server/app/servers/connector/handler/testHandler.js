@@ -4,6 +4,6 @@
 
 var handlerMgr = require("./../handlerMgr");
 var consts = require("../../../util/consts");
-handlerMgr.handler(consts.MSG_TYPE.MSG_TYPE_BEGIN, function(msg, session, next) {
+handlerMgr.handler(consts.TYPE_MSG.TYPE_MSG_BEGIN, function(msg, session, next) {
     next(null, {code: 200, msg: 'test.'});
 });

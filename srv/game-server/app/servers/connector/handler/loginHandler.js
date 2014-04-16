@@ -4,7 +4,7 @@
 var handlerMgr = require("./../handlerMgr");
 var consts = require("../../../util/consts");
 var redis_pools = require("../../../nosql/redis_pools");
-handlerMgr.handler(consts.MSG_TYPE.MSG_TYPE_LOGIN, function(msg, session, next) {
+handlerMgr.handler(consts.TYPE_MSG.TYPE_MSG_LOGIN, function(msg, session, next) {
     var random_val = Math.floor(Math.random()*10000000);
     redis_pools.execute("pool_1",function(client, release){
         client.hset("chess" + ":" + "king_lee" + random_val,"hello","hi",function (err, reply){
