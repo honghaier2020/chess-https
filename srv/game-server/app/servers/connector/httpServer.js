@@ -14,19 +14,14 @@ connector.prototype.createHttpServer = function() {
         var url = req.url;
 		var client_ip = req.connection.remoteAddress;
 		console.log("new client coming ip:" + client_ip + " method:" + req.method + " url:" + url);
-        if(url == "/test")
-        {
-            self.pressTest(req,res);
-            return;
-        }
 		switch(req.method){
 			case 'GET':{
                 res.end();
 				break;
 			}
 			case 'POST':{
-                self.parsePost(req,res,function(msg){
-                    self.dispatchMessage(msg,req,res);
+                self.parsePost(req,res,function(data){
+                    self.dispatchMessage(data,url,req,res);
 				});
 				break;
 			}
@@ -48,20 +43,25 @@ connector.prototype.parsePost = function(req,res,cb){
     
     req.on('end', function() {
         //  convert array to string,delimiter is "";
-        chunks = chunks.join('');
+        var data = chunks.join('');
         //  convert url format to normal!!
-        cb(qs.parse(chunks));
+        cb(qs.parse(data));
     });
     req.on('error',function(err){
         console.log('problem with request: ' + err.message);
     });
 };
 
-connector.prototype.dispatchMessage = function(msg,req,res){
-    msg = JSON.parse(msg);
+connector.prototype.dispatchMessage = function(data,url,req,res){
+    if(url == "/test")
+    {
+        self.pressTest(req,res);
+        return;
+    }
+    var msg = JSON.parse(data.msg);
     handlerMgr.trigger(msg.msg_id,msg,null,function(error,res_msg){
         console.log("after dispatchMessage ... %j", res_msg);
-        if(1){
+        if(0){
             //  by default the encoding is 'utf8'.
             res.write(JSON.stringify(res_msg));
             res.end();
@@ -77,20 +77,7 @@ connector.prototype.dispatchMessage = function(msg,req,res){
 
 connector.prototype.pressTest = function(req,res){
     var msg = '{"context": "context", "msg_id": 2}';
-    switch(req.method){
-        case 'GET':{
-            res.end();
-            break;
-        }
-        case 'POST':{
-                this.dispatchMessage(msg,req,res);
-            break;
-        }
-        default:{
-            res.end();
-            break;
-        }
-    }
+    this.dispatchMessage(msg,req,res);
 };
 
 module.exports = connector;
