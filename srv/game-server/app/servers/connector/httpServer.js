@@ -55,8 +55,8 @@ connector.prototype.parsePost = function(req,res,cb){
 connector.prototype.dispatchMessage = function(data,url,req,res){
     if(url == "/test")
     {
-        self.pressTest(req,res);
-        return;
+        //  date for test
+        data = qs.parse('msg={"context": "context", "msg_id": 2}&account=king_lee');
     }
     var msg = JSON.parse(data.msg);
     handlerMgr.trigger(msg.msg_id,msg,null,function(error,res_msg){
@@ -74,10 +74,4 @@ connector.prototype.dispatchMessage = function(data,url,req,res){
         }
     });
 };
-
-connector.prototype.pressTest = function(req,res){
-    var msg = '{"context": "context", "msg_id": 2}';
-    this.dispatchMessage(msg,req,res);
-};
-
 module.exports = connector;
