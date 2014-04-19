@@ -3,8 +3,6 @@ var httpServer = require('./app/servers/connector/httpServer');
 var connectors = require('./app/online/connectors');
 //  test code begin
 var test = require('./app/test/test');
-var hello_world = require('./app/test/component/hello_world');
-var http_connectors = require('./app/component/http_connectors');
 //  test code end
 /**
  * Init app for client.
@@ -30,25 +28,24 @@ app.configure('production|development', 'connector', function(){
     app.set('httpServer',http);
     var __connectors = new connectors();
     app.set('connectors',__connectors);
+    /*
+    var timeReport =  require('./app/test/modules/timeReport');
+    app.registerAdmin(timeReport, {app: app});
+    */
 });
-
 
 // start app
 app.start();
 //  test code begin
-if(1)
+if(0)
 {
-    /*
-    app.configure('production|development', 'connector', function() {
-        app.load(hello_world, {interval: 5000});
-    });
-    */
+    test.test_event_emitter();
+    test.test_add_component_hello_world(app);
+    test.test_add_component_http_connector(app);
+}
+else
+{
 
-    app.configure('production|development', 'connector', function() {
-        app.load(http_connectors, {host:"127.0.0.1",port: 3001});
-    });
-
-    //test.test_event_emitter();
 }
 //  test code end
 
