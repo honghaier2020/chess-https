@@ -28,10 +28,14 @@ app.configure('production|development', 'connector', function(){
     app.set('httpServer',http);
     var __connectors = new connectors();
     app.set('connectors',__connectors);
-    /*
-    var timeReport =  require('./app/test/modules/timeReport');
-    app.registerAdmin(timeReport, {app: app});
-    */
+});
+
+// configure for global
+app.configure('production|development', function(){
+    if(0){
+        var timeReport =  require('./app/test/modules/timeReport');
+        app.registerAdmin(timeReport, {app: app});
+    }
 });
 
 // start app
