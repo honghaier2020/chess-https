@@ -9,13 +9,11 @@ var util = require('util');
  * construct function
  * @param user
  */
-var session = function(user){
+var session = function(){
     events.EventEmitter.call(this);
-    this.user = user;
     this.settings = {};
     this.uid = null;
 };
-module.exports = session;
 
 util.inherits(session, events.EventEmitter);
 
@@ -62,3 +60,5 @@ session.prototype.set = function(key, value) {
 session.prototype.get = function(key) {
     return this.settings[key];
 };
+
+module.exports = session;

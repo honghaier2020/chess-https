@@ -9,8 +9,6 @@ var connectors = function() {
     this.sessions = {};
 };
 
-module.exports = connectors;
-
 /**
  * get user from database,is not exist,create one.
  * @param uid
@@ -26,14 +24,37 @@ connectors.prototype.load_user = function(uid,cb) {
             if(!exist){
                 var user =  new obj_user(uid);
                 redis_wrapper.save_user(user);
-                callback(null, exist);
+                callback(null, user);
+            }
+            else{
+                callback(null, null);
             }
         }
-    ], function (err, exist) {
-        redis_wrapper.load_user(uid,cb);
+    ], function (err, user) {
+        redis_wrapper.load_user(uid,user,cb);
+    });
+};
+/**
+ * bind session,add a relevance between uid and session
+ * @param uid
+ * @param session
+ */
+connectors.prototype.add = function(uid,session){
+    this.sessions[uid] = session;
+    this.trigger(uid);
+};
+
+/**
+ * trigger event when emit called
+ * @param uid
+ */
+connectors.prototype.trigger = function(uid){
+    this.sessions[uid].on("bind",function(uid){
+        console.log("trigger bind event uid = " + uid);
+    });
+    this.sessions[uid].on("unbind",function(uid){
+        console.log("trigger unbind event uid = " + uid);
     });
 };
 
-connectors.prototype.add = function(uid,user){
-    this.sessions[uid] = user;
-};
+module.exports = connectors;

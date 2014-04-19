@@ -9,6 +9,7 @@ var connector = function(host,port) {
 	this.server = null;
 	this.host = host;
 	this.port = port;
+    //  a temp variable
     this.session = null;
 };
 
@@ -65,11 +66,12 @@ connector.prototype.dispatchMessage = function(data,url,req,res){
 
     var msg = JSON.parse(data.msg);
     var account = data.account;
-    var uid = general.general_uid();
+    var uid = general.general_uid(account);
     pomelo.app.get('connectors').load_user(uid,function(user){
         this.session = new session();
-        session.bind(uid);
-        session.set('user',user);
+        pomelo.app.get('connectors').add(uid,this.session);
+        this.session.bind(uid);
+        this.session.set('user',user);
         handlerMgr.trigger(msg.msg_id,msg,this.session,function(error,res_msg){
             console.log("after dispatchMessage ... %j", res_msg);
             if(0){
@@ -84,18 +86,6 @@ connector.prototype.dispatchMessage = function(data,url,req,res){
                 res.end( JSON.stringify(res_msg));
             }
         });
-    });
-};
-
-/**
- * register all event
- */
-connector.prototype.register = function(){
-    session.on('bind',function(){
-        //  bind session to a global session array
-    });
-    session.on('unbind',function(){
-        //  unbind session from a global session array
     });
 };
 
