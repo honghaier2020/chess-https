@@ -4,6 +4,7 @@ var connectors = require('./app/online/connectors');
 //  test code begin
 var test = require('./app/test/test');
 var hello_world = require('./app/test/component/hello_world');
+var http_connectors = require('./app/component/http_connectors');
 //  test code end
 /**
  * Init app for client.
@@ -37,8 +38,14 @@ app.start();
 //  test code begin
 if(1)
 {
+    /*
     app.configure('production|development', 'connector', function() {
         app.load(hello_world, {interval: 5000});
+    });
+    */
+
+    app.configure('production|development', 'connector', function() {
+        app.load(http_connectors, {host:"127.0.0.1",port: 3001});
     });
 
     //test.test_event_emitter();
