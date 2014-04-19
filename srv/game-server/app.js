@@ -1,7 +1,10 @@
 var pomelo = require('pomelo');
 var httpServer = require('./app/servers/connector/httpServer');
 var connectors = require('./app/online/connectors');
+//  test code begin
 var test = require('./app/test/test');
+var hello_world = require('./app/test/component/hello_world');
+//  test code end
 /**
  * Init app for client.
  */
@@ -28,12 +31,17 @@ app.configure('production|development', 'connector', function(){
     app.set('connectors',__connectors);
 });
 
+
 // start app
 app.start();
 //  test code begin
-if(0)
+if(1)
 {
-    test.test_event_emitter();
+    app.configure('production|development', 'connector', function() {
+        app.load(hello_world, {interval: 5000});
+    });
+
+    //test.test_event_emitter();
 }
 //  test code end
 
