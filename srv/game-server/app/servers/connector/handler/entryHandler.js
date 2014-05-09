@@ -1,4 +1,4 @@
-var handlerMgr = require('./handlerMgr');
+var handlerMgr = require('./../handlerMgr');
 module.exports = function(app) {
   return new Handler(app);
 };

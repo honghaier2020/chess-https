@@ -1,5 +1,5 @@
 var pomelo = require('pomelo');
-var httpServer = require('./app/httpServer');
+var httpServer = require('./app/servers/connector/httpServer');
 /**
  * Init app for client.
  */
