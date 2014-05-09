@@ -28,7 +28,6 @@ namespace chess
 	{
 		if(inst_)
 		{
-			inst_->clearup();
 			delete inst_;
 			inst_ = NULL;
 		}
@@ -39,7 +38,6 @@ namespace chess
 		if(curl_)
 		{
 			curl_easy_setopt(curl_, CURLOPT_URL, __url);
-
 			curl_easy_setopt( curl_, CURLOPT_WRITEFUNCTION, fun_write_data );
 		}
 		return true;
@@ -53,19 +51,27 @@ namespace chess
 		return __size;
 	}
 
+	void NetHttpImpl::write_data( void* __user_data )
+	{
+		curl_easy_setopt( curl_, CURLOPT_WRITEDATA, __user_data );
+	}
+
+	void NetHttpImpl::post( void* __data )
+	{
+		/* Now specify the POST data */
+		curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, __data);
+		/* Perform the request, res will get the return code */
+		res_ = curl_easy_perform(curl_);
+		_check_error();
+	}
+
 	void NetHttpImpl::_check_error()
 	{
 		/* Check for errors */ 
 		if(res_ != CURLE_OK)
 		{
-			fprintf(stderr, "curl_easy_perform() failed: %s\n",
-				curl_easy_strerror(res_));
+			fprintf(stderr, "curl_easy_perform() failed: %s\n",curl_easy_strerror(res_));
 		}
-	}
-
-	void NetHttpImpl::write_data(void* __user_data)
-	{
-		curl_easy_setopt( curl_, CURLOPT_WRITEDATA, __user_data );
 	}
 
 	void NetHttpImpl::clearup()
@@ -74,12 +80,5 @@ namespace chess
 		curl_easy_cleanup(curl_);
 	}
 
-	void NetHttpImpl::post( void* __data )
-	{
-		/* Now specify the POST data */
-		curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, __data);
-		/* Perform the request, res will get the return code */ 
-		res_ = curl_easy_perform(curl_);
-		_check_error();
-	}
+
 }
