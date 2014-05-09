@@ -18,16 +18,15 @@ connector.prototype.createHttpServer = function() {
 			}
 			case 'POST':{
                 self.parsePost(req,res,function(args){
-                    self.httpMessage(client_ip,req.url,args,function(){
+                    self.httpMessage(client_ip,req.url,args,function(req,res){
                             res.writeHead(200, {'Content-Type': 'text/html'});
-                            res.write('<h1>hi,</h1>');
                             res.end('<p>I have get data. many thanks</p>');
                         },req,res);
 				});
 				break;
 			}
 			default:{
-                res.end();
+
                 break;
 			}
 		}
@@ -49,7 +48,7 @@ connector.prototype.parsePost = function(req,res,cb){
 
 connector.prototype.httpMessage = function(client_ip,url,args,cb,req,res){
 	console.log(args);
-    cb();
+    cb(req,res);
 };
 
 module.exports = connector;
