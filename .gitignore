@@ -34,6 +34,7 @@
 *.log
 srv/.idea/
 srv/game-server/node_modules/
+srv/game-server/logs/
 srv/web-server/node_modules/
 cli/cocos2dx/
 cli/external/
