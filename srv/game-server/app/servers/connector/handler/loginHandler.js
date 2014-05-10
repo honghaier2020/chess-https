@@ -11,5 +11,8 @@ handlerMgr.handler(consts.MSG_TYPE.MSG_TYPE_LOGIN, function(msg, session, next) 
             release();
         });
     });
-    next(null, {code: 200, msg: 'login is ok.'});
+    var ret_msg = {};
+    ret_msg.msg_id = msg.msg_id;
+    ret_msg.context = "login is ok.";
+    next(null, {code: 200, msg: ret_msg});
 });

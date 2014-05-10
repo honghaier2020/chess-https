@@ -19,8 +19,9 @@ app.configure('production|development', 'connector', function(){
     console.log("config load for redis  %s", app.getBase() + '/config/redis.json');
     require('./app/nosql/redis_pools').configure(app.get('redis'));
     //  create http server
-    var http = new httpServer();
+    var http = new httpServer(app.get('curServer').host,app.get('curServer').httpClientPort);
     http.createHttpServer();
+
     app.set('httpServer',http);
 });
 
