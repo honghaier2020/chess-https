@@ -46,7 +46,8 @@ namespace chess
 	size_t NetHttpImpl::fun_write_data( void* __buffer, size_t __size, size_t __nmemb, void* __userp )
 	{
 		int* __val = static_cast<int*>(__userp);
-		char __data[512] = {};
+		char __data[512];
+		memset(__data,0,sizeof(__data));
 		strcpy(__data,(const char*)__buffer);
 		return __size;
 	}

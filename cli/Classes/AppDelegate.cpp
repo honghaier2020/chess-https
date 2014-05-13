@@ -135,7 +135,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 			int __val = 9999;
 			this->set_user_data(&__val);
 			json_t* __msg = json_object();
-			json_t* __msg_id = json_integer(MSG_ID::MSG_BEGIN);
+			json_t* __msg_id = json_integer(MSG_ID::MSG_LOGIN);
 			json_t* __msg_context = json_string("context");
 			json_object_set(__msg, "msg_id", __msg_id);
 			json_object_set(__msg, "context", __msg_context);
