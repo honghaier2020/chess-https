@@ -45,6 +45,9 @@ connector.prototype.parsePost = function(req,res,cb){
         chunks = chunks.join('');
         cb(chunks);
     });
+    req.on('error',function(err){
+        console.log('problem with request: ' + err.message);
+    });
 };
 
 connector.prototype.dispatchMessage = function(msg,req,res){
