@@ -1,4 +1,5 @@
 var http = require("http");
+var qs = require( 'querystring' );
 var handlerMgr = require('./handlerMgr');
 
 var connector = function(host,port) {
@@ -10,9 +11,14 @@ var connector = function(host,port) {
 connector.prototype.createHttpServer = function() {
     var self = this;
 	this.server = http.createServer(function(req, res) {
-		
+        var url = req.url;
 		var client_ip = req.connection.remoteAddress;
-		console.log("new client coming ip:" + client_ip + " method:" + req.method + " url:" + req.url);
+		console.log("new client coming ip:" + client_ip + " method:" + req.method + " url:" + url);
+        if(url == "/test")
+        {
+            self.pressTest(req,res);
+            return;
+        }
 		switch(req.method){
 			case 'GET':{
                 res.end();
@@ -43,7 +49,8 @@ connector.prototype.parsePost = function(req,res,cb){
     req.on('end', function() {
         //  convert array to string,delimiter is "";
         chunks = chunks.join('');
-        cb(chunks);
+        //  convert url format to normal!!
+        cb(qs.parse(chunks));
     });
     req.on('error',function(err){
         console.log('problem with request: ' + err.message);
@@ -51,6 +58,7 @@ connector.prototype.parsePost = function(req,res,cb){
 };
 
 connector.prototype.dispatchMessage = function(msg,req,res){
+    console.log('msg: ' + msg);
     msg = JSON.parse(msg);
     console.log("before dispatchMessage ... %j", msg);
     handlerMgr.trigger(msg.msg_id,msg,null,function(error,res_msg){
@@ -67,6 +75,26 @@ connector.prototype.dispatchMessage = function(msg,req,res){
             res.end( JSON.stringify(res_msg));
         }
     });
+};
+
+connector.prototype.pressTest = function(req,res){
+    switch(req.method){
+        case 'GET':{
+            res.end();
+            break;
+        }
+        case 'POST':{
+            this.parsePost(req,res,function(msg){
+                console.log(msg);
+                //self.dispatchMessage(msg,req,res);
+            });
+            break;
+        }
+        default:{
+            res.end();
+            break;
+        }
+    }
 };
 
 module.exports = connector;
