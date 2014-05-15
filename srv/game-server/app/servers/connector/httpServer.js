@@ -58,9 +58,7 @@ connector.prototype.parsePost = function(req,res,cb){
 };
 
 connector.prototype.dispatchMessage = function(msg,req,res){
-    console.log('msg: ' + msg);
     msg = JSON.parse(msg);
-    console.log("before dispatchMessage ... %j", msg);
     handlerMgr.trigger(msg.msg_id,msg,null,function(error,res_msg){
         console.log("after dispatchMessage ... %j", res_msg);
         if(1){
@@ -78,16 +76,14 @@ connector.prototype.dispatchMessage = function(msg,req,res){
 };
 
 connector.prototype.pressTest = function(req,res){
+    var msg = '{"context": "context", "msg_id": 2}';
     switch(req.method){
         case 'GET':{
             res.end();
             break;
         }
         case 'POST':{
-            this.parsePost(req,res,function(msg){
-                console.log(msg);
-                //self.dispatchMessage(msg,req,res);
-            });
+                this.dispatchMessage(msg,req,res);
             break;
         }
         default:{
