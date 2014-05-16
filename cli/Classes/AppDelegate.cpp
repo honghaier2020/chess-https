@@ -132,6 +132,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		else
 		{
 			//	post data to http server
+			std::string __string_account = "&account=king_lee";
+			std::string __string_msg = "msg=";
 			int __val = 9999;
 			this->set_user_data(&__val);
 			json_t* __msg = json_object();
@@ -139,7 +141,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 			json_t* __msg_context = json_string("context");
 			json_object_set(__msg, "msg_id", __msg_id);
 			json_object_set(__msg, "context", __msg_context);
-			this->do_post(/*"hi, I will post some data, are you ready!"*/json_dumps(__msg,0));
+			__string_msg  += json_dumps(__msg,0);
+			__string_msg += __string_account;
+			this->do_post(/*"hi, I will post some data, are you ready!"*/(char*)__string_msg.c_str());
 			// decref for json object
 			json_decref(__msg_id);
 		}
